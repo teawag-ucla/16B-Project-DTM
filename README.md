@@ -1,3 +1,5 @@
 # 16B-Project-DTM
-Created By: Diya Cowlagi, Tea Wagstaff, Fameda Mema
-For PIC 16B 
+Created By: Diya Cowlagi, Tea Wagstaff, Fameda Mema for PIC 16B 
+
+Group Contributions:
+
