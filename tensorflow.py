@@ -5,7 +5,7 @@ Created on Wed Dec  3 15:10:12 2025
 
 @author: diyacowlagi
 """
-
+#from lecture
 import string
 import tensorflow as tf
 import re
