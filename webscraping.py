@@ -1,4 +1,4 @@
-#what i have for bbc new and ap news and pbs news
+#news functions
 def news_webscrapper(keyword, url, article_tag, article_class, headline_tag, headline_class, byline_tag, byline_class):
     headlines = []
     bylines = []
@@ -42,56 +42,7 @@ def news_webscrapper(keyword, url, article_tag, article_class, headline_tag, hea
 
     return df_to_return
 
-    #ap news
-keywords = ["sustainable", "renewable", "marketing"]
-dfs_with_all_keywords = pd.DataFrame()
-for word in keywords:
-    print("word: " + word)
-    url = "https://apnews.com/search?q=" + word + "%20&s=0&p="
-    df_per_keyword = news_webscrapper(word, url, "div", "PagePromo", "div", "PagePromo-description", "div", "PagePromo-title")
-    dfs_with_all_keywords = pd.concat([dfs_with_all_keywords, df_per_keyword], ignore_index=True) #index thing makes everything combine well
-    #now add a column that mentions news: AP news
-    dfs_with_all_keywords["Source Type"] = "News: AP News"
-
-
-#dfs_with_all_keywords #filter with specfic words
-df_ap = dfs_with_all_keywords
-
-#bbc news
-keywords = ["sustainable", "renewable", "marketing"]
-dfs_with_all_keywords = pd.DataFrame()
-for word in keywords:
-    print("word: " + word)
-    url = "https://www.bbc.com/search?q=" + str(word) + "&page="
-    df_per_keyword = news_webscrapper(word, url, "div", "sc-cdecfb63-0 cJcHVD", "h2", "sc-fa814188-3 ifRknM", "div", "sc-cdecfb63-3 iIFdam")
-    dfs_with_all_keywords = pd.concat([dfs_with_all_keywords, df_per_keyword], ignore_index=True) #index thing makes everything combine well
-    #now add a column that mentions news: BBC news
-    dfs_with_all_keywords["Source Type"] = "News: BBC News"
-
-
-#dfs_with_all_keywords #filter with specfic words
-df_bbc = dfs_with_all_keywords
-
-#pbs news
-keywords = ["sustainable", "renewable", "marketing"]
-dfs_with_all_keywords = pd.DataFrame()
-for word in keywords:
-    print("word: " + word)
-    url = "https://www.pbs.org/newshour/search-results?q=" + word + "&pnb="
-    df_per_keyword = news_webscrapper(word, url, "li", "search-result", "h4", "search-result__title", "p", "search-result__snippet")
-    dfs_with_all_keywords = pd.concat([dfs_with_all_keywords, df_per_keyword], ignore_index=True) #index thing makes everything combine well
-    #now add a column that mentions news: BBC news
-    dfs_with_all_keywords["Source Type"] = "News: PBS News"
-
-df_npr= dfs_with_all_keywords
-
-#putting them together
-df_combined = pd.concat([df_ap, df_bbc], ignore_index=True)
-df_combined = pd.concat([df_combined, df_npr], ignore_index=True)
-df_combined
-
-
-
+#journal functions
 import fitz
 import pandas as pd
 from pathlib import Path
@@ -173,8 +124,8 @@ def pdf_scraper(pdf_path: str, keywords: List[str], journal_name: str = None, co
     return concatenated
 
 
-
-    from selenium import webdriver
+#magazines code
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
