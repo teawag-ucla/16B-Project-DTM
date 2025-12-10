@@ -1,5 +1,21 @@
 #news functions
 def news_webscrapper(keyword, url, article_tag, article_class, headline_tag, headline_class, byline_tag, byline_class):
+    """
+    Scrapes news articles where the url's are desgined in a way where the only changes per page is the page number and keyword.
+
+    Paramters:
+    keyword (str): keyword being explored
+    url (str): the link the website
+    article_tag (str): the larger part of where the headline and byline are (have to inspect and will see the class and tag)
+    article _class (str): the larger part of where the headline and byline are
+    headline_tag (str): the part the headline is enclosed in
+    headline_class (str): the part the headline is enclosed in
+    byline_tag (str): the part the byline is enclosed in
+    byline_class (str): the part the byline is enclosed in
+
+    Returns:
+    pd.DataFrame: DataFrame with columns "Headline", "Byline"
+    """
     headlines = []
     bylines = []
 
