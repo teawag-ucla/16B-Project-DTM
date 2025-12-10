@@ -37,7 +37,8 @@ def vectorize_headline(text, label, vectorize_layer1):
     vectorize_layer1 (tf.keras.layers.TextVectorization): A fitted TextVectorization layer used to transform the headline into vectors
 
     Returns:
-    string tensor with all characters lowercased and punctuation removed
+    vectorized_text (tf.Tensor): The numerical vector representation of the text.
+    label (list): A list containing the original label
     """
     text = tf.expand_dims(text, -1)
     return vectorize_layer1(text), [label]
