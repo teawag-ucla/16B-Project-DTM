@@ -120,21 +120,21 @@ def pdf_scraper(pdf_path: str, keywords: List[str], journal_name: str = None, co
     line_data = fitz_scrape()
     return pd.DataFrame(line_data)
 
-    def journalpdf_concat(*df: pd.DataFrame, reset_index: bool = True) -> pd.DataFrame:
+def journalpdf_concat(*df: pd.DataFrame, reset_index: bool = True) -> pd.DataFrame:
     """
     Function that concatenates multiple journal DataFrames.
-
+    
     Parameters:
     *df: a number of dataframes
     reset_index: bool with default True, determines whether to reset the index of the combined dataframe.
-
+    
     Returns:
     pd.DataFrame: Concatenated dataframe
     """
     #checks if it is a df, if not returns a empty data frame
     if not df:
         return pd.DataFrame()
-
+    
     #concatenates the passed in dataframes
     concatenated = pd.concat(df, ignore_index = reset_index)
     return concatenated
@@ -194,5 +194,3 @@ def link2soup(link):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'}
     data = requests.get(link, headers=headers).text
     return BeautifulSoup(data)
-
-    
