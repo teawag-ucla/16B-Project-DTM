@@ -10,6 +10,19 @@ Sources:
 * https://matplotlib.org/stable/gallery/pie_and_polar_charts/pie_features.html
 * https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.barh.html
 """
+import pandas as pd
+from nltk.sentiment import SentimentIntensityAnalyzer
+import nltk
+import re
+from collections import Counter
+from nltk.corpus import stopwords
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import CountVectorizer #converts to numerical counts
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.cluster import KMeans
+import numpy as np
+from scipy.stats import pearsonr
 
 #Keywords list 
 keywords = [
