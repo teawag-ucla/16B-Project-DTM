@@ -75,7 +75,7 @@ def news_webscrapper(keyword, url, article_tag, article_class, headline_tag, hea
     return df_to_return
 
 #journal functions
-def pdf_scraper(pdf_path: str, keywords: List[str], journal_name: str = None, context_lines: int = 1) -> pd.DataFrame:
+def pdf_scraper(pdf_path: str, keywords: list[str], journal_name: str = None, context_lines: int = 1) -> pd.DataFrame:
     """
     PDF Scraper function that uses fitz to scrape academic journals.
 
