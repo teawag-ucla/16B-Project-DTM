@@ -1,3 +1,19 @@
+import fitz
+import pandas as pd
+from pathlib import Path
+import re
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+from bs4 import BeautifulSoup
+import requests
+import pandas as pd
+
 #news functions
 def news_webscrapper(keyword, url, article_tag, article_class, headline_tag, headline_class, byline_tag, byline_class):
     """
@@ -59,11 +75,6 @@ def news_webscrapper(keyword, url, article_tag, article_class, headline_tag, hea
     return df_to_return
 
 #journal functions
-import fitz
-import pandas as pd
-from pathlib import Path
-import re
-
 def pdf_scraper(pdf_path: str, keywords: List[str], journal_name: str = None, context_lines: int = 1) -> pd.DataFrame:
     """
     PDF Scraper function that uses fitz to scrape academic journals.
@@ -141,16 +152,6 @@ def journalpdf_concat(*df: pd.DataFrame, reset_index: bool = True) -> pd.DataFra
 
 
 #magazines code
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import time
-from bs4 import BeautifulSoup
-import requests
-import pandas as pd
 
 def click_button_vogue(url, num_of_clicks):
     """
