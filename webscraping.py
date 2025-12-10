@@ -86,7 +86,7 @@ def pdf_scraper(pdf_path: str, keywords: list[str], journal_name: str = None, co
     context_lines (int): Number of lines around the keyword to save as data
 
     Returns:
-    pd.DataFrame: DataFrame with columns "journal_name", "keywords", "line", "page_num",
+    pd.DataFrame: DataFrame with columns "Journal Name", "keywords", "text", "Source Type",
     """
 
     #Sets the name of the journal if no name was given
@@ -120,10 +120,10 @@ def pdf_scraper(pdf_path: str, keywords: list[str], journal_name: str = None, co
                         context = ' '.join(lines[beg_index:end_index])
 
                         line_data.append({
-                            "Headline": journal_name,
+                            "Journal Name": journal_name,
                             "keyword": keyword,
-                            "byline": context,
-                            "source": source
+                            "text": context,
+                            "Source Type": source
                         })
         journal.close()
         return line_data
