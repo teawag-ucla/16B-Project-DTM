@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.exceptions import NotFittedError
+from sklearn.tree import DecisionTreeRegressor, plot_tree, export_text
+from sklearn.model_selection import cross_val_score
 import matplotlib.pyplot as plt
 
 #This is Tea's code from Homework 3
@@ -78,4 +80,4 @@ def plot_best_depth(best_depth, cv_scores):
         ylabel = "cross validation score")
   plt.scatter(range(1,10), cv_scores)
   plt.title("Best Depth: "+ str(best_depth))
-  print(best_score)
+  print(max(cv_scores))
