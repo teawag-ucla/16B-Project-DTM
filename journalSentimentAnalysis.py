@@ -231,7 +231,7 @@ class TestSentimentAnalysis(unittest.TestCase):
         self.assertEqual(neu_result['sent_type'].iloc[0], 'neu')
         
     def test_text_sentimentAnalysis_custom_column_name(self):
-        """Test that function works with custom column names"""
+        #Test that function works with custom column names
         custom_df = pd.DataFrame({
             'custom_text': ['Good text', 'Bad text', 'Neutral text'],
             'other_col': [1, 2, 3]
@@ -242,12 +242,12 @@ class TestSentimentAnalysis(unittest.TestCase):
         self.assertEqual(len(result), 3)
         
     def test_key_sentimentAnalysis_returns_dataframe(self):
-        """Test that key_sentimentAnalysis returns a DataFrame"""
+        #Test that key_sentimentAnalysis returns a DataFrame
         result = key_sentimentAnalysis(self.df_with_sentiment)
         self.assertIsInstance(result, pd.DataFrame)
 
     def test_key_sentimentAnalysis_statistics_calculated(self):
-        """Test that statistics are calculated correctly"""
+        #Test that statistics are calculated correctly
         result = key_sentimentAnalysis(self.df_with_sentiment)
             
         # For each keyword, check statistics exist
@@ -258,7 +258,7 @@ class TestSentimentAnalysis(unittest.TestCase):
             self.assertIsNotNone(row['sent_neg_mean'])
             self.assertIsInstance(row['typeCount_summ'], dict)
     def test_key_sentimentAnalysis_sorting(self):
-        """Test that results are sorted by sent_comp_mean in descending order"""
+        #Test that results are sorted by sent_comp_mean in descending order
         result = key_sentimentAnalysis(self.df_with_sentiment)
             
         # Check if in descending order
