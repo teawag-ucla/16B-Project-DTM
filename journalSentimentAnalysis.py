@@ -176,7 +176,7 @@ class TestSentimentAnalysis(unittest.TestCase):
                 "12345", # Numbers only
                 None # None value
             ],
-            'keyword': ['product', 'product', 'service', 'service', 'product', 'service', 'product'],
+            'keyword': ['product', 'product', 'cars', 'cars', 'product', 'cars', 'product'],
             'article_id': [1, 2, 3, 4, 5, 6, 7]
         })
         # Run sentiment analysis on test data
