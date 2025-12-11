@@ -176,7 +176,8 @@ if __name__ == "__main__":
     import unittest
     import warnings
     warnings.filterwarnings('ignore')
-
+    unittest.main(argv=[''],exit=False)
+    
 class TestSentimentAnalysis(unittest.TestCase):
     def setUp(self):
         """Create test data before each test"""
