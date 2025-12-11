@@ -235,3 +235,97 @@ def link2soup(link):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'}
     data = requests.get(link, headers=headers).text
     return BeautifulSoup(data)
+    
+def teenvogue_scraper(list_of_keywords: list, pub_name: str =teenvogue, num_clicks: int, find_list: list) -> DataFrame:
+    """
+    Scrapes the TeenVogue website for headline of articles using the search terms in list_of_keywords
+
+    Args:
+    list_of_keywords (list): List of keywords to search for
+    pub_name (str): Name of the publication, lowercase & no spaces as seen in url
+    num_clicks (int): Number of times to click the "More Stories" button
+    find_list (list): List of elements in the HTML to scrape, this is a list of 8 strings
+
+    Returns:
+    pd.DataFrame with columns "Headlines", "Bylines", "Dates", "Keyword"
+    """
+    Headlines=[]
+    Bylines=[]
+    Dates=[]
+    Keyword=[]
+
+    for key in list_of_keywords:
+        keyword = key.upper()
+        url = "https://www." + pub_name + ".com/search?q=" + keyword +"&sort=score+desc"
+        soup = link2soup(url)
+
+        if soup.find(find_list[0], class_=find_list[1]).get_text() == 'No stories found for your search':
+            print("oops can't find anything")
+        else:
+            soup = click_button(url, num_clicks, find_list) #DO NOT REMOVE, is needed to load page properly for scraping
+            for headline in soup.find_all(find_list[2], class_=find_list[3]):
+                Headlines.append(headline.get_text())
+            for byline in soup.find_all(find_list[4], class_=find_list[5]):
+                Bylines.append(byline.get_text().replace("By ", ""))
+            for date in soup.find_all(find_list[6], class_=find_list[7]):
+                Dates.append(date.get_text())
+                Keyword.append(key)
+
+    df = pd.DataFrame({"Headlines":Headlines, "Bylines":Bylines, "Dates":Dates, "Keyword":Keyword})
+    df["Source"]=pub_name
+    df["Source Type"]="Magazine"
+    return df
+
+def click_button(url, num_of_clicks):
+    """
+    This is a helper function used in teenvogue_scraper
+    This function is used to click the "More Stories" button on the TeenVogue website
+
+    WARNING: This is very slow. Try not to run too often, as each click adds at least 3s
+    waiting for new content to load
+
+
+    Args:
+    url - string of url
+    num_of_clicks - int, how many times you want to click the "More Stories" button
+
+    Returns BeautifulSoup object
+    """
+    driver = webdriver.Chrome()
+    driver.get(url)
+    time.sleep(3)
+
+    wait = WebDriverWait(driver, 10)
+    try:
+        # wait until the button exists
+        reject_button = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "button[id^='fides-reject-all-button']"))
+        )
+
+        # remove the overlay that blocks clicks
+        driver.execute_script("""
+            const overlay = document.querySelector('.fides-modal-overlay');
+            if (overlay) {
+                overlay.parentNode.removeChild(overlay);
+                console.log('Overlay removed by script.');
+            }
+        """)
+
+        # click with JS
+        driver.execute_script("arguments[0].click();", reject_button)
+        print("Continue with Opt-out button clicked.")
+    except Exception:
+        print("No Popups found")
+
+    time.sleep(3)
+
+    for num in range(num_of_clicks):
+        wait = WebDriverWait(driver, 10)
+        button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='More Stories']]")))
+        driver.execute_script("arguments[0].scrollIntoView();", button)    # scroll to button
+        button.click()
+        time.sleep(3) # wait for new content to load
+
+    page_source = driver.page_source #scrape content
+    soup = BeautifulSoup(page_source, 'html.parser')
+    return soup
