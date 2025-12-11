@@ -9,6 +9,7 @@ Sources:
 * https://www.geeksforgeeks.org/python/python-sentiment-analysis-using-vader/
 * https://matplotlib.org/stable/gallery/pie_and_polar_charts/pie_features.html
 * https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.barh.html
+* https://docs.python.org/3/library/unittest.html
 """
 import pandas as pd
 from nltk.sentiment import SentimentIntensityAnalyzer
@@ -166,3 +167,122 @@ def sent_result_graphs(df: pd.DataFrame, key_summ: pd.DataFrame) -> None:
 
     plt.tight_layout()
     plt.show()
+
+
+"""
+Unit Testing for Sentimental Analysis
+"""
+if __name__ == "__main__":
+    import unittest
+    import warnings
+    warnings.filterwarnings('ignore')
+
+class TestSentimentAnalysis(unittest.TestCase):
+    def setUp(self):
+        """Create test data before each test"""
+        # Test data with known sentiment patterns
+        self.test_data = pd.DataFrame({
+            'byline': [
+                "Eco-Friendly products are better for the environment!", # Positive
+                "Pollution from excessive consumption is harming the environment.", # Negative
+                "The Earth is round.",  # Neutral
+                "", # Empty string
+                "Mixed feelings on electric cars. It's good but can also be bad.",  # Mixed
+                "12345", # Numbers only
+                None # None value
+            ],
+            'keyword': ['product', 'product', 'service', 'service', 'product', 'service', 'product'],
+            'article_id': [1, 2, 3, 4, 5, 6, 7]
+        })
+            
+            # Run sentiment analysis on test data
+            self.df_with_sentiment = text_sentimentAnalysis(self.test_data, 'byline')
+    def test_text_sentimentAnalysis_returns_dataframe(self):
+        """Test that function returns a DataFrame"""
+        result = text_sentimentAnalysis(self.test_data)
+        self.assertIsInstance(result, pd.DataFrame)
+        
+    def test_text_sentimentAnalysis_adds_columns(self):
+        """Test that all sentiment columns are added"""
+        result = text_sentimentAnalysis(self.test_data)
+        expected_columns = ['sent_scores', 'sent_comp', 'sent_pos', 'sent_neg', 'sent_neu', 'sent_type']
+            
+        for col in expected_columns:
+            self.assertIn(col, result.columns, f"Column {col} missing from result")
+        
+    def test_text_sentimentAnalysis_handles_empty_strings(self):
+        """Test that empty strings don't break the analysis"""
+        empty_df = pd.DataFrame({'byline': ['', '', '']})
+        result = text_sentimentAnalysis(empty_df)
+            
+        # Should not crash and should return all sentiment columns
+        self.assertIn('sent_comp', result.columns)
+        self.assertEqual(len(result), 3)
+        
+    def test_text_sentimentAnalysis_handles_none_values(self):
+        """Test that None values are handled"""
+        none_df = pd.DataFrame({'byline': [None, 'test', None]})
+        result = text_sentimentAnalysis(none_df)
+            
+        # Should not crash
+        self.assertIn('sent_comp', result.columns)
+        self.assertEqual(len(result), 3)
+        
+    def test_text_sentimentAnalysis_sentiment_classification(self):
+        """Test that sentiment types are correctly classified"""
+        result = self.df_with_sentiment
+            
+        # Positive text should be classified as 'pos'
+        pos_text = "I love this amazing idea!"
+        pos_df = pd.DataFrame({'byline': [pos_text]})
+        pos_result = text_sentimentAnalysis(pos_df)
+        self.assertEqual(pos_result['sent_type'].iloc[0], 'pos')
+            
+        # Negative text should be classified as 'neg'
+        neg_text = "I hate this terrible idea!"
+        neg_df = pd.DataFrame({'byline': [neg_text]})
+        neg_result = text_sentimentAnalysis(neg_df)
+        self.assertEqual(neg_result['sent_type'].iloc[0], 'neg')
+            
+        # Neutral text should be classified as 'neu'
+        neu_text = "This is an idea."
+        neu_df = pd.DataFrame({'byline': [neu_text]})
+        neu_result = text_sentimentAnalysis(neu_df)
+        self.assertEqual(neu_result['sent_type'].iloc[0], 'neu')
+        
+    def test_text_sentimentAnalysis_custom_column_name(self):
+        """Test that function works with custom column names"""
+        custom_df = pd.DataFrame({
+            'custom_text': ['Good text', 'Bad text', 'Neutral text'],
+            'other_col': [1, 2, 3]
+        })
+            
+        result = text_sentimentAnalysis(custom_df, column='custom_text')
+        self.assertIn('sent_comp', result.columns)
+        self.assertEqual(len(result), 3)
+        
+    def test_key_sentimentAnalysis_returns_dataframe(self):
+        """Test that key_sentimentAnalysis returns a DataFrame"""
+        result = key_sentimentAnalysis(self.df_with_sentiment)
+        self.assertIsInstance(result, pd.DataFrame)
+
+    def test_key_sentimentAnalysis_statistics_calculated(self):
+        """Test that statistics are calculated correctly"""
+        result = key_sentimentAnalysis(self.df_with_sentiment)
+            
+        # For each keyword row, check statistics exist
+        for idx, row in result.iterrows():
+            self.assertIsNotNone(row['sent_comp_count'])
+            self.assertIsNotNone(row['sent_comp_mean'])
+            self.assertIsNotNone(row['sent_pos_mean'])
+            self.assertIsNotNone(row['sent_neg_mean'])
+            self.assertIsInstance(row['typeCount_summ'], dict)
+    def test_key_sentimentAnalysis_sorting(self):
+        """Test that results are sorted by sent_comp_mean in descending order"""
+        result = key_sentimentAnalysis(self.df_with_sentiment)
+            
+        # Check if sorted in descending order
+        comp_means = result['sent_comp_mean'].tolist()
+        self.assertEqual(comp_means, sorted(comp_means, reverse=True),
+                         "DataFrame should be sorted by sent_comp_mean descending")
+        
