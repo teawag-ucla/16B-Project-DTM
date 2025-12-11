@@ -152,6 +152,46 @@ def journalpdf_concat(*df: pd.DataFrame, reset_index: bool = True) -> pd.DataFra
 
 
 #magazines code
+def teenvogue_scraper(list_of_keywords: list, pub_name: str =teenvogue, num_clicks: int, find_list: list) -> DataFrame:
+    """
+    Scrapes the TeenVogue website for headline of articles using the search terms in list_of_keywords
+
+    Args:
+    list_of_keywords (list): List of keywords to search for
+    pub_name (str): Name of the publication, lowercase & no spaces as seen in url
+    num_clicks (int): Number of times to click the "More Stories" button
+    find_list (list): List of elements in the HTML to scrape, this is a list of 8 strings
+
+    Returns:
+    pd.DataFrame with columns "Headlines", "Bylines", "Dates", "Keyword"
+    """
+    Headlines=[]
+    Bylines=[]
+    Dates=[]
+    Keyword=[]
+
+    for key in list_of_keywords:
+        keyword = key.upper()
+        url = "https://www." + pub_name + ".com/search?q=" + keyword +"&sort=score+desc"
+        soup = link2soup(url)
+
+        if soup.find(find_list[0], class_=find_list[1]).get_text() == 'No stories found for your search':
+            print("oops can't find anything")
+        else:
+            soup = click_button(url, num_clicks, find_list) #DO NOT REMOVE, is needed to load page properly for scraping
+            for headline in soup.find_all(find_list[2], class_=find_list[3]):
+                Headlines.append(headline.get_text())
+            for byline in soup.find_all(find_list[4], class_=find_list[5]):
+                Bylines.append(byline.get_text().replace("By ", ""))
+            for date in soup.find_all(find_list[6], class_=find_list[7]):
+                Dates.append(date.get_text())
+                Keyword.append(key)
+
+    df = pd.DataFrame({"Headlines":Headlines, "Bylines":Bylines, "Dates":Dates, "Keyword":Keyword})
+    df["Source"]=pub_name
+    df["Source Type"]="Magazine"
+    return df
+
 
 def click_button_vogue(url, num_of_clicks):
     """
