@@ -1,6 +1,8 @@
 # 16B-Project-DTM
 Created By: Diya Cowlagi, Tea Wagstaff, Fameda Mema for PIC 16B 
 
+How to utilize this Repository:
+
 Group Contributions:
 
 All group members contributed to all aspects of the project. We collectively worked on web scraping, contributed to each presentation (the development of it and actually presenting it), and posted code regularly to a shared notebook in Google Colab, which served as our primary collaboration platform. We met weekly to provide updates and took detailed planning notes to track our progress. We also texted frequently to update each other on our progress. Additionally, we all contributed to the written components of the project, including the proposal, midterm report, and final report.
