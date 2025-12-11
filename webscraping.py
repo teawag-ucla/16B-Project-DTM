@@ -1,3 +1,6 @@
+#====================
+# IMPORTS
+#====================
 import fitz
 import pandas as pd
 from pathlib import Path
@@ -14,7 +17,9 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 
-#news functions
+#====================
+# NEWS SCRAPING
+#====================
 def news_webscrapper(keyword, url, article_tag, article_class, headline_tag, headline_class, byline_tag, byline_class):
     """
     Scrapes news articles where the url's are desgined in a way where the only changes per page is the page number and keyword.
@@ -74,7 +79,9 @@ def news_webscrapper(keyword, url, article_tag, article_class, headline_tag, hea
 
     return df_to_return
 
-#journal functions
+#====================
+# JOURNAL SCRAPING
+#====================
 def pdf_scraper(pdf_path: str, keywords: list[str], journal_name: str = None, context_lines: int = 1) -> pd.DataFrame:
     """
     PDF Scraper function that uses fitz to scrape academic journals.
@@ -151,7 +158,9 @@ def journalpdf_concat(*df: pd.DataFrame, reset_index: bool = True) -> pd.DataFra
     return concatenated
 
 
-#magazines code
+#====================
+# MAGAZINE SCRAPING
+#====================
 def teenvogue_scraper(list_of_keywords: list, pub_name: str =teenvogue, num_clicks: int, find_list: list) -> DataFrame:
     """
     Scrapes the TeenVogue website for headline of articles using the search terms in list_of_keywords
