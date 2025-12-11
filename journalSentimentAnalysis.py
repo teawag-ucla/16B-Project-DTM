@@ -170,7 +170,7 @@ def sent_result_graphs(df: pd.DataFrame, key_summ: pd.DataFrame) -> None:
 
 
 """
-Unit Testing for Sentimental Analysis
+Unit Testing for Journal Sentimental Analysis
 """
 if __name__ == "__main__":
     import unittest
@@ -194,9 +194,8 @@ class TestSentimentAnalysis(unittest.TestCase):
             'keyword': ['product', 'product', 'service', 'service', 'product', 'service', 'product'],
             'article_id': [1, 2, 3, 4, 5, 6, 7]
         })
-            
-            # Run sentiment analysis on test data
-            self.df_with_sentiment = text_sentimentAnalysis(self.test_data, 'byline')
+        # Run sentiment analysis on test data
+        self.df_with_sentiment = text_sentimentAnalysis(self.test_data, 'byline')
     def test_text_sentimentAnalysis_returns_dataframe(self):
         """Test that function returns a DataFrame"""
         result = text_sentimentAnalysis(self.test_data)
