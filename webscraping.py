@@ -178,7 +178,7 @@ def teenvogue_scraper(list_of_keywords: list, pub_name: str =teenvogue, num_clic
         if soup.find(find_list[0], class_=find_list[1]).get_text() == 'No stories found for your search':
             print("oops can't find anything")
         else:
-            soup = click_button(url, num_clicks, find_list) #DO NOT REMOVE, is needed to load page properly for scraping
+            soup = click_button(url, num_clicks) #DO NOT REMOVE, is needed to load page properly for scraping
             for headline in soup.find_all(find_list[2], class_=find_list[3]):
                 Headlines.append(headline.get_text())
             for byline in soup.find_all(find_list[4], class_=find_list[5]):
