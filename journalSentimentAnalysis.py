@@ -176,11 +176,12 @@ class TestSentimentAnalysis(unittest.TestCase):
                 "12345", # Numbers only
                 None # None value
             ],
-            'keyword': ['product', 'product', 'cars', 'cars', 'product', 'cars', 'product'],
+            'keyword': ['product', 'consumption', 'cars', 'excessive', 'pollution', 'Earth', 'eco-friendly'],
             'article_id': [1, 2, 3, 4, 5, 6, 7]
         })
         # Run sentiment analysis on test data
         self.df_with_sentiment = text_sentimentAnalysis(self.test_data, 'byline')
+    
     def test_text_sentimentAnalysis_returns_dataframe(self):
         #Test that function returns a DataFrame
         result = text_sentimentAnalysis(self.test_data)
@@ -189,8 +190,7 @@ class TestSentimentAnalysis(unittest.TestCase):
     def test_text_sentimentAnalysis_adds_columns(self):
         #Test that all sentiment columns are added
         result = text_sentimentAnalysis(self.test_data)
-        expected_columns = ['sent_scores', 'sent_comp', 'sent_pos', 'sent_neg', 'sent_neu', 'sent_type']
-            
+        expected_columns = ['sent_scores', 'sent_comp', 'sent_pos', 'sent_neg', 'sent_neu', 'sent_type'] 
         for col in expected_columns:
             self.assertIn(col, result.columns, f"Column {col} missing from result")
         
@@ -248,8 +248,7 @@ class TestSentimentAnalysis(unittest.TestCase):
 
     def test_key_sentimentAnalysis_statistics_calculated(self):
         #Test that statistics are calculated correctly
-        result = key_sentimentAnalysis(self.df_with_sentiment)
-            
+        result = key_sentimentAnalysis(self.df_with_sentiment)  
         # For each keyword, check statistics exist
         for idx, row in result.iterrows():
             self.assertIsNotNone(row['sent_comp_count'])
@@ -257,10 +256,10 @@ class TestSentimentAnalysis(unittest.TestCase):
             self.assertIsNotNone(row['sent_pos_mean'])
             self.assertIsNotNone(row['sent_neg_mean'])
             self.assertIsInstance(row['typeCount_summ'], dict)
+    
     def test_key_sentimentAnalysis_sorting(self):
         #Test that results are sorted by sent_comp_mean in descending order
-        result = key_sentimentAnalysis(self.df_with_sentiment)
-            
+        result = key_sentimentAnalysis(self.df_with_sentiment)  
         # Check if in descending order
         comp_means = result['sent_comp_mean'].tolist()
         self.assertEqual(comp_means, sorted(comp_means, reverse=True),
